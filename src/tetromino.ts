@@ -26,12 +26,10 @@ export const squarePiece = new Tetromino("yellow", [
   [true, true],
   [true, true],
 ]);
-
 export const tPiece = new Tetromino("pink", [
   [true, true, true],
   [false, true, false],
 ]);
-
 export const lPiece = new Tetromino("orange", [
   [true, false],
   [true, false],

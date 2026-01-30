@@ -44,4 +44,6 @@ onload = () => {
   setBoardSize();
   // drawBlock({ x: 0, y: 0, color: "red" });
   drawTetromino(randomPiece());
+
+  document.addEventListener("keypress", (event) => {});
 };
