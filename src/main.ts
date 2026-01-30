@@ -84,7 +84,7 @@ onload = () => {
     redraw();
   });
 
-  const gameLoop = setInterval(() => {
+  setInterval(() => {
     console.log("Going down...");
     game.movePiece(Movement.DOWN);
     redraw();
