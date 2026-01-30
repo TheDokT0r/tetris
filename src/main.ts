@@ -1,9 +1,10 @@
-import Game from "./board";
+import Game, { Movement } from "./game";
 import "./style.css";
 import { type Block } from "./tetromino";
 
 let ctx: CanvasRenderingContext2D | null = null;
 let canvas: HTMLCanvasElement;
+let gameSpeedMs = 1000;
 const BLOCK_SIZE = 50 as const;
 const game = new Game(10, 20);
 
@@ -26,19 +27,15 @@ function drawBlock(block: Block, x: number, y: number) {
 
   ctx.strokeStyle = "black";
   ctx.lineWidth = 1;
-  ctx.strokeRect(x + 0.5, y + 0.5, BLOCK_SIZE - 1, BLOCK_SIZE - 1);
+  ctx.strokeRect(
+    absoluteX + 0.5,
+    absoluteY + 0.5,
+    BLOCK_SIZE - 1,
+    BLOCK_SIZE - 1,
+  );
 
   ctx.restore();
 }
-
-// function drawTetromino(tetromino: Tetromino) {
-//   const blocks = tetromino.getBlocks();
-//   blocks.forEach((line) => {
-//     line.forEach((block) => {
-//       drawBlock(block);
-//     });
-//   });
-// }
 
 function drawBoard() {
   const { board } = game;
@@ -59,15 +56,37 @@ function drawTetromino() {
   }
 }
 
+function redraw() {
+  if (!ctx) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawBoard();
+  drawTetromino();
+}
+
 onload = () => {
   canvas = document.getElementById("game-canvas") as HTMLCanvasElement;
   if (!canvas) return;
   ctx = canvas.getContext("2d");
   setCanvasSize();
-  drawBoard();
-  drawTetromino();
-  // drawBlock({ x: 0, y: 0, color: "red" });
-  // drawTetromino(randomPiece());
+  redraw();
 
-  // document.addEventListener("keypress", (event) => {});
+  document.addEventListener("keydown", (event) => {
+    if (event.key == "ArrowRight") {
+      game.movePiece(Movement.RIGHT);
+    } else if (event.key == "ArrowLeft") {
+      game.movePiece(Movement.LEFT);
+    } else if (event.key == "ArrowUp") {
+      game.movePiece(Movement.ROTATE);
+    } else if (event.key == "ArrowDown") {
+      game.movePiece(Movement.DOWN);
+    }
+
+    redraw();
+  });
+
+  const gameLoop = setInterval(() => {
+    console.log("Going down...");
+    game.movePiece(Movement.DOWN);
+    redraw();
+  }, gameSpeedMs);
 };
