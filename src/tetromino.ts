@@ -1,22 +1,27 @@
-export type Block = { x: number; y: number; color: string } | null;
+export type Block = { color: string } | null;
+
+interface Position {
+  x: number;
+  y: number;
+}
 
 export default class Tetromino {
-  private blocks: Block[][];
+  public blocks: Block[][];
+  public position: Position;
 
   constructor(color: string, shape: boolean[][]) {
-    this.blocks = shape.map((line, i) => {
-      return line.map((blockB, j) => {
+    this.blocks = shape.map((line) => {
+      return line.map((blockB) => {
         if (!blockB) return null;
 
         return {
-          x: j,
-          y: i,
           color: color,
         } as Block;
       }) as Block[];
     });
+
+    this.position = { x: 0, y: 0 };
   }
-  public getBlocks = () => this.blocks;
 }
 
 export const straightPiece = new Tetromino("blue", [
@@ -44,7 +49,7 @@ export const zPiece = new Tetromino("red", [
   [false, true, true],
 ]);
 
-export function randomPiece(): Tetromino {
+export function randomTetromino(): Tetromino {
   const pieces = [straightPiece, squarePiece, tPiece, lPiece, sPiece, zPiece];
   return pieces[Math.floor(Math.random() * pieces.length)];
 }

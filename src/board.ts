@@ -1,35 +1,20 @@
-interface BoardPiece {
-  occupied: false;
-  color?: string;
-}
+import type Tetromino from "./tetromino";
+import { randomTetromino, type Block } from "./tetromino";
 
-interface Position {
-  x: number;
-  y: number;
-}
-
-export default class Board {
-  private board: BoardPiece[][];
+export default class Game {
+  public board: Block[][];
+  public playedPiece: Tetromino;
 
   constructor(width: number, height: number) {
-    const newBoard: BoardPiece[][] = [];
+    const newBoard: Block[][] = [];
     for (let i = 0; i < height; i++) {
-      const line: BoardPiece[] = [];
+      const line: Block[] = [];
       for (let j = 0; j < width; j++) {
-        line.push({ occupied: false });
+        line.push(null);
       }
-
       newBoard.push(line);
     }
-
     this.board = newBoard;
-  }
-
-  public setPiece({ x, y }: Position, piece: BoardPiece) {
-    this.board[y][x] = piece;
-  }
-
-  public getPiece({ x, y }: Position) {
-    return this.board[y][x];
+    this.playedPiece = randomTetromino();
   }
 }
