@@ -10,9 +10,16 @@ export enum Movement {
   QUICK_DROP,
 }
 
+interface SavedPiece {
+  turnSaved: number;
+  piece?: Tetromino;
+}
+
 export default class Game {
   public board: Block[][];
   public playedPiece: Tetromino;
+  private savedPiece: SavedPiece;
+  private turn: number;
 
   constructor(width: number, height: number) {
     const newBoard: Block[][] = [];
@@ -25,6 +32,10 @@ export default class Game {
     }
     this.board = newBoard;
     this.playedPiece = randomTetromino();
+    this.turn = 0;
+    this.savedPiece = {
+      turnSaved: -1,
+    };
   }
 
   public movePiece(direction: Movement) {
@@ -58,7 +69,7 @@ export default class Game {
       direction === Movement.DOWN &&
       !this.canPlace(this.playedPiece.blocks, newPos)
     ) {
-      this.addPieceToBoard();
+      this.endTurn();
       this.playedPiece = randomTetromino();
       return;
     }
@@ -75,7 +86,7 @@ export default class Game {
     }
 
     this.playedPiece.position = { x, y };
-    this.addPieceToBoard();
+    this.endTurn();
     this.playedPiece = randomTetromino();
   }
 
@@ -106,7 +117,8 @@ export default class Game {
     return true;
   }
 
-  private addPieceToBoard() {
+  private endTurn() {
+    // Saves the piece to board
     const { x: posX, y: posY } = this.playedPiece.position;
     const blocks = this.playedPiece.blocks;
 
@@ -123,6 +135,7 @@ export default class Game {
       }
     }
 
+    this.turn++;
     this.checkFullLine();
   }
 
@@ -146,6 +159,22 @@ export default class Game {
     }
 
     this.board = newBoard;
+  }
+
+  public savePiece() {
+    if (this.savedPiece.turnSaved == this.turn) return;
+
+    const savedPieceCopy = this.savedPiece.piece ?? randomTetromino();
+    this.savedPiece = {
+      turnSaved: this.turn,
+      piece: this.playedPiece,
+    };
+    this.playedPiece = savedPieceCopy;
+    this.playedPiece.position = { x: 0, y: 0 };
+  }
+
+  public getSavedPiece() {
+    return this.savedPiece;
   }
 }
 

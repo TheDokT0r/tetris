@@ -81,6 +81,10 @@ onload = () => {
       game.movePiece(Movement.DOWN);
     } else if (event.key == "r") {
       game.quickDrop();
+    } else if (event.key == "q") {
+      game.savePiece();
+      document.getElementById("saved-piece")!.innerText =
+        `Holding: ${game.getSavedPiece().piece?.id ?? "Nothing"}`;
     }
 
     redraw();
