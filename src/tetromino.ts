@@ -1,15 +1,12 @@
 export type Block = { color: string } | null;
 
-interface Position {
-  x: number;
-  y: number;
-}
-
 export default class Tetromino {
   public blocks: Block[][];
-  public position: Position;
+  public position: { x: number; y: number };
+  public id: string;
 
-  constructor(color: string, shape: boolean[][]) {
+  constructor(id: string, color: string, shape: boolean[][]) {
+    this.id = id;
     this.blocks = shape.map((line) => {
       return line.map((blockB) => {
         if (!blockB) return null;
@@ -24,32 +21,32 @@ export default class Tetromino {
   }
 }
 
-export const straightPiece = new Tetromino("blue", [
+export const straightPiece = new Tetromino("stirght", "blue", [
   [true, true, true, true, true],
 ]);
-export const squarePiece = new Tetromino("yellow", [
+export const squarePiece = new Tetromino("sqaure", "yellow", [
   [true, true],
   [true, true],
 ]);
-export const tPiece = new Tetromino("pink", [
+export const tPiece = new Tetromino("T", "pink", [
   [true, true, true],
   [false, true, false],
 ]);
-export const lPiece = new Tetromino("orange", [
+export const lPiece = new Tetromino("L", "orange", [
   [true, false],
   [true, false],
   [true, true],
 ]);
-export const sPiece = new Tetromino("green", [
+export const sPiece = new Tetromino("S", "green", [
   [false, true, true],
   [true, true, false],
 ]);
-export const zPiece = new Tetromino("red", [
+export const zPiece = new Tetromino("Z", "red", [
   [true, true, false],
   [false, true, true],
 ]);
 
 export function randomTetromino(): Tetromino {
   const pieces = [straightPiece, squarePiece, tPiece, lPiece, sPiece, zPiece];
-  return pieces[Math.floor(Math.random() * pieces.length)];
+  return { ...pieces[Math.floor(Math.random() * pieces.length)] };
 }

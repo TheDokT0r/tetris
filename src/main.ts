@@ -79,13 +79,14 @@ onload = () => {
       game.movePiece(Movement.ROTATE);
     } else if (event.key == "ArrowDown") {
       game.movePiece(Movement.DOWN);
+    } else if (event.key == "r") {
+      game.quickDrop();
     }
 
     redraw();
   });
 
   setInterval(() => {
-    console.log("Going down...");
     game.movePiece(Movement.DOWN);
     redraw();
   }, gameSpeedMs);
