@@ -30,21 +30,6 @@ export default class Game {
     let newPos = this.playedPiece.position;
     const { x, y } = newPos;
 
-    // if (direction === Movement.RIGHT) {
-    //   newPos = { x: x + 1, y };
-    // } else if (direction === Movement.LEFT) {
-    //   newPos = { x: x - 1, y };
-    // } else if (direction === Movement.DOWN) {
-    //   newPos = { x, y: y + 1 };
-    // } else if (direction === Movement.ROTATE) {
-    //   const rotated = rotateMatrixCW(this.playedPiece.blocks);
-
-    //   if (this.canPlace(rotated, this.playedPiece.position)) {
-    //     this.playedPiece.blocks = rotated;
-    //   }
-    //   return;
-    // }
-
     switch (direction) {
       case Movement.RIGHT: {
         newPos = { x: x + 1, y };
