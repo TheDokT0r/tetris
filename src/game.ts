@@ -51,6 +51,14 @@ export default class Game {
         return;
       }
     }
+    if (
+      direction === Movement.DOWN &&
+      !this.canPlace(this.playedPiece.blocks, newPos)
+    ) {
+      this.addPieceToBoard();
+      this.playedPiece = randomTetromino();
+      return;
+    }
 
     if (this.canPlace(this.playedPiece.blocks, newPos)) {
       this.playedPiece.position = newPos;
@@ -82,6 +90,18 @@ export default class Game {
       }
     }
     return true;
+  }
+
+  private addPieceToBoard() {
+    const { x: posX, y: posY } = this.playedPiece.position;
+    const blocks = this.playedPiece.blocks;
+
+    for (let y = 0; y < blocks.length; y++) {
+      for (let x = 0; x < blocks[0].length; x++) {
+        if (!blocks[y][x]) continue;
+        this.board[posY + y][posX + x] = blocks[y][x];
+      }
+    }
   }
 }
 
