@@ -85,20 +85,6 @@ export default class Game {
   }
 }
 
-// Vibe coded function because I can't be bothered
 function rotateMatrixCW<T>(matrix: T[][]): T[][] {
-  const rows = matrix.length;
-  const cols = matrix[0].length;
-
-  const result: T[][] = Array.from({ length: cols }, () =>
-    Array(rows).fill(null),
-  );
-
-  for (let y = 0; y < rows; y++) {
-    for (let x = 0; x < cols; x++) {
-      result[x][rows - 1 - y] = matrix[y][x];
-    }
-  }
-
-  return result;
+  return matrix[0].map((_, index) => matrix.map((row) => row[index]).reverse());
 }
