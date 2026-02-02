@@ -21,9 +21,7 @@ export default class Tetromino {
   }
 }
 
-export const straightPiece = new Tetromino("stirght", "blue", [
-  [true, true, true, true, true],
-]);
+export const straightPiece = new Tetromino("stirght", "blue", [[true, true, true, true, true]]);
 export const squarePiece = new Tetromino("sqaure", "yellow", [
   [true, true],
   [true, true],
