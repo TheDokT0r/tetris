@@ -2,21 +2,28 @@ name: Prettier Check
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  check:
+  setup:
+    uses: ./.github/workflows/setup-node-pnpm.yml
+
+  prettier:
+    needs: setup
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Download node_modules
+        uses: actions/download-artifact@v4
+        with:
+          name: node_modules
+          path: .
 
       - name: Prettier Check
         uses: creyD/prettier_action@v4.6
         with:
           only_changed: false
           prettier_options: --check "**/*.{js,ts,json,md,css,html,svelte}"
-          prettier_plugins: "prettier-plugin-svelte"
           dry: true
