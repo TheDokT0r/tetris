@@ -1,4 +1,3 @@
-import { get } from "svelte/store";
 import Tetromino from "./tetromino";
 import { randomTetromino, type Block } from "./tetromino";
 import { savedPiece } from "@/stores/gameData";
