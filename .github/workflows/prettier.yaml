@@ -1,21 +1,22 @@
-name: Auto Prettier Format
+name: Prettier Check
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
 jobs:
-  prettier:
+  check:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Prettify code
+      - name: Prettier Check
         uses: creyD/prettier_action@v4.6
         with:
-          prettier_options: --write "**/*.{js,ts,json,md,css,html,svelte}"
+          only_changed: false
+          prettier_options: --check "**/*.{js,ts,json,md,css,html,svelte}"
+          prettier_plugins: "prettier-plugin-svelte"
+          dry: true
