@@ -17,3 +17,7 @@
 canvas {
     border: 1px solid white;
 }
+
+.app-container {
+    display: flex;
+}
