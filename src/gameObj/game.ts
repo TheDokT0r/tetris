@@ -1,5 +1,7 @@
+import { get } from "svelte/store";
 import Tetromino from "./tetromino";
 import { randomTetromino, type Block } from "./tetromino";
+import { savedPiece } from "@/stores/gameData";
 
 export enum Movement {
   UP,
@@ -10,15 +12,9 @@ export enum Movement {
   QUICK_DROP,
 }
 
-interface SavedPiece {
-  turnSaved: number;
-  piece?: Tetromino;
-}
-
 export default class Game {
   public board: Block[][];
   public playedPiece: Tetromino;
-  private savedPiece: SavedPiece;
   private turn: number;
 
   constructor(width: number, height: number) {
@@ -33,9 +29,8 @@ export default class Game {
     this.board = newBoard;
     this.playedPiece = randomTetromino();
     this.turn = 0;
-    this.savedPiece = {
-      turnSaved: -1,
-    };
+
+    savedPiece.set({ turn: -1 });
   }
 
   public movePiece(direction: Movement) {
@@ -161,20 +156,16 @@ export default class Game {
     this.board = newBoard;
   }
 
-  public savePiece() {
-    if (this.savedPiece.turnSaved == this.turn) return;
+  public swapPiece() {
+    savedPiece.update((currentSavedPiece) => {
+      if (currentSavedPiece.turn == this.turn) return currentSavedPiece;
+      const playedPieceCopy = this.playedPiece;
+      this.playedPiece = currentSavedPiece.piece ?? randomTetromino();
+      this.playedPiece.position = { x: 0, y: 0 };
 
-    const savedPieceCopy = this.savedPiece.piece ?? randomTetromino();
-    this.savedPiece = {
-      turnSaved: this.turn,
-      piece: this.playedPiece,
-    };
-    this.playedPiece = savedPieceCopy;
-    this.playedPiece.position = { x: 0, y: 0 };
-  }
-
-  public getSavedPiece() {
-    return this.savedPiece;
+      playedPieceCopy.position = { x: 0, y: 0 };
+      return { turn: this.turn, piece: playedPieceCopy };
+    });
   }
 }
 
