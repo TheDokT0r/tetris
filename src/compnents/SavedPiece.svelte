@@ -1,13 +1,19 @@
 <script lang="ts">
     import { savedPiece } from "@/stores/gameData";
-    import { onMount } from "svelte";
+  import { onMount } from "svelte";
     const BLOCK_SIZE = 50 as const;
 
     let canvas = $state<HTMLCanvasElement>();
+    let ctx = $state<CanvasRenderingContext2D | null>(null);
+
+    onMount(() => {
+      if (!canvas) return;
+      ctx = canvas.getContext("2d");
+    })
 
     function drawSavedPiece() {
         if (!canvas) return;
-        const ctx = canvas.getContext("2d");
+        ctx = canvas.getContext("2d");
         if (!ctx) return;
 
         if (!$savedPiece.piece) return;
@@ -38,7 +44,9 @@
     }
 
     $effect(() => {
-        if (!$savedPiece.piece) return;
+        if (!$savedPiece.piece || !canvas || !ctx) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
         drawSavedPiece();
     });
 </script>

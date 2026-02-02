@@ -4,6 +4,23 @@
 </script>
 
 <main>
+    <div>
+
     <Game />
+    </div>
+    <div>
+
     <SavedPiece />
+    </div>
 </main>
+
+<style lang="scss">
+    main {
+        display: flex;
+        text-align: center;
+
+        div {
+            margin: 5%;
+        }
+    }
+</style>
