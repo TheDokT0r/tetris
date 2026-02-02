@@ -59,10 +59,7 @@ export default class Game {
     }
 
     // Checks if the piece can no longer go down and locks it in place
-    if (
-      direction === Movement.DOWN &&
-      !this.canPlace(this.playedPiece.blocks, newPos)
-    ) {
+    if (direction === Movement.DOWN && !this.canPlace(this.playedPiece.blocks, newPos)) {
       this.endTurn();
       this.playedPiece = randomTetromino();
       return;
