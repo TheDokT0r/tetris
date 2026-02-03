@@ -1,48 +1,31 @@
-name: Prettier Check
-
+name: autofix.ci
 on:
   pull_request:
-    branches: [main]
-
+  push:
+    branches:
+      - main
+permissions:
+  contents: write
 jobs:
-  setup:
+  prettier:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
 
-      - uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 24
           cache: "pnpm"
 
-      - run: pnpm install --frozen-lockfile
+      - name: Install and Format
+        run: |
+          corepack enable
+          pnpm install
+          pnpm prettier . --write
 
-      - name: Upload node_modules
-        uses: actions/upload-artifact@v4
+      - uses: autofix-ci/action@v1
         with:
-          name: node_modules
-          path: |
-            node_modules
-            **/node_modules
-
-  prettier:
-    needs: setup
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download node_modules
-        uses: actions/download-artifact@v4
-        with:
-          name: node_modules
-          path: .
-
-      - name: Prettier Check
-        uses: creyD/prettier_action@v4.6
-        with:
-          only_changed: false
-          prettier_options: --check "**/*.{js,ts,json,md,css,html,svelte}"
-          dry: true
+          commit-message: "Apply Prettier format"
