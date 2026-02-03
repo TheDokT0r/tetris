@@ -169,7 +169,9 @@ export default class Game {
   }
 
   private centerPieceX() {
-    this.playedPiece.position.x = Math.floor((this.board[0].length - this.playedPiece.blocks[0].length) / 2);
+    this.playedPiece.position.x = Math.floor(
+      (this.board[0].length - this.playedPiece.blocks[0].length) / 2,
+    );
   }
 }
 
