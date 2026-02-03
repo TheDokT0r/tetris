@@ -27,6 +27,7 @@ export default class Game {
     }
     this.board = newBoard;
     this.playedPiece = randomTetromino();
+    this.centerPieceX();
     this.turn = 0;
 
     savedPiece.set({ turn: -1 });
@@ -62,6 +63,7 @@ export default class Game {
     if (direction === Movement.DOWN && !this.canPlace(this.playedPiece.blocks, newPos)) {
       this.endTurn();
       this.playedPiece = randomTetromino();
+      this.checkFullLine();
       return;
     }
 
@@ -120,7 +122,9 @@ export default class Game {
         const boardY = posY + y;
         const boardX = posX + x;
 
-        if (boardY < 0) continue;
+        // Skip blocks outside board boundaries
+        if (boardY < 0 || boardY >= this.board.length) continue;
+        if (boardX < 0 || boardX >= this.board[0].length) continue;
 
         this.board[boardY][boardX] = blocks[y][x];
       }
@@ -157,11 +161,15 @@ export default class Game {
       if (currentSavedPiece.turn == this.turn) return currentSavedPiece;
       const playedPieceCopy = this.playedPiece;
       this.playedPiece = currentSavedPiece.piece ?? randomTetromino();
-      this.playedPiece.position = { x: 0, y: 0 };
+      this.centerPieceX();
 
       playedPieceCopy.position = { x: 0, y: 0 };
       return { turn: this.turn, piece: playedPieceCopy };
     });
+  }
+
+  private centerPieceX() {
+    this.playedPiece.position.x = Math.floor((this.board[0].length - this.playedPiece.blocks[0].length) / 2);
   }
 }
 
