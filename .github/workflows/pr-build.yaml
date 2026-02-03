@@ -7,21 +7,24 @@ on:
     branches: [main]
 
 jobs:
-  setup:
-    uses: ./.github/workflows/setup-node-pnpm.yml
-
   build:
-    needs: setup
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Download node_modules
-        uses: actions/download-artifact@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          name: node_modules
-          path: .
+          node-version: 24
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Build project
-        run: pnpm run build
+        run: npm run build
