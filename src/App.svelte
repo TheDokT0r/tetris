@@ -1,26 +1,24 @@
 <script lang="ts">
-    import Game from "./compnents/Game.svelte";
-    import SavedPiece from "./compnents/SavedPiece.svelte";
+  import Game from "./compnents/Game.svelte";
+  import SavedPiece from "./compnents/SavedPiece.svelte";
 </script>
 
 <main>
-    <div>
-
+  <div>
     <Game />
-    </div>
-    <div>
-
+  </div>
+  <div>
     <SavedPiece />
-    </div>
+  </div>
 </main>
 
 <style lang="scss">
-    main {
-        display: flex;
-        text-align: center;
+  main {
+    display: flex;
+    text-align: center;
 
-        div {
-            margin: 5%;
-        }
+    div {
+      margin: 5%;
     }
+  }
 </style>

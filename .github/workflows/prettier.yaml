@@ -1,21 +1,31 @@
-name: Auto Prettier Format
-
+name: autofix.ci
 on:
+  pull_request:
   push:
     branches:
       - main
-
+permissions:
+  contents: write
 jobs:
   prettier:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
-      - name: Prettify code
-        uses: creyD/prettier_action@v4.6
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          prettier_options: --write "**/*.{js,ts,json,md,css,html,svelte}"
+          cache: "pnpm"
+
+      - name: Install and Format
+        run: |
+          corepack enable
+          pnpm install
+          pnpm prettier . --write
+
+      - uses: autofix-ci/action@v1
+        with:
+          commit-message: "Apply Prettier format"
