@@ -9,6 +9,9 @@
   onMount(() => {
     if (!canvas) return;
     ctx = canvas.getContext("2d");
+
+    canvas.width = 4 * BLOCK_SIZE;
+    canvas.height = 4 * BLOCK_SIZE;
   });
 
   function drawSavedPiece() {
